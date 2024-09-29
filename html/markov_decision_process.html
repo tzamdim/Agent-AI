@@ -7,10 +7,12 @@
 <link href="markov_decision_process_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="markov_decision_process_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="markov_decision_process_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="markov_decision_process_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<link href="markov_decision_process_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="markov_decision_process_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="markov_decision_process_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.4.549">
 
-  <title>LLM-based Agents</title>
+  <title>AI Agents</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -392,7 +394,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">LLM-based Agents</h1>
+  <h1 class="title">AI Agents</h1>
 
 <div class="quarto-title-authors">
 </div>
@@ -402,41 +404,26 @@
 
 <!----------------------------------------------------- Content ----------------------------------------------------->
 </section>
-<section>
-<section id="markov-decision-process" class="title-slide slide level1 center">
-<h1>Markov Decision Process</h1>
-
-</section>
 <section id="content" class="slide level2">
 <h2>Content</h2>
 <div class="columns">
-<div class="column" style="width:33%;">
+<div class="column" style="width:50%;">
 <p><strong>Concepts</strong></p>
 <ul>
 <li class="fragment">Description</li>
 <li class="fragment">Representation</li>
 <li class="fragment">Applications</li>
 </ul>
-</div><div class="column" style="width:33%;">
-<p><strong>Formalism</strong></p>
+</div><div class="column" style="width:50%;">
+<p><strong>Examples</strong></p>
 <ul>
-<li class="fragment">Definitions</li>
-<li class="fragment">State value</li>
-<li class="fragment">Action value</li>
-<li class="fragment">Properties</li>
-<li class="fragment">Bellman equations</li>
-</ul>
-</div><div class="column" style="width:33%;">
-<p><strong>Implementation</strong></p>
-<ul>
-<li class="fragment">Model</li>
-<li class="fragment">Policy</li>
-<li class="fragment">Bellman equations solutions</li>
+<li class="fragment">Grid World</li>
+<li class="fragment">Mountain Car</li>
 </ul>
 </div>
 </div>
 <!---------------------------------------------------- Concepts ---------------------------------------------------->
-</section></section>
+</section>
 <section>
 <section id="concepts" class="title-slide slide level1 center">
 <h1>Concepts</h1>
@@ -489,786 +476,80 @@
 <li class="fragment"><p>Reward Space: <span class="math inline">\(\mathscr{R} = \{ \text{+10 for recovery}, \text{-5 for side effects}, \text{-10 for relapse} \}\)</span></p></li>
 <li class="fragment"><p>Model: The dynamics describe how treatments affect the patient’s health, with probabilistic transitions between health states based on treatment and health conditions.</p></li>
 </ul>
-<!---------------------------------------------------- Formalism ---------------------------------------------------->
+<!---------------------------------------------------- Examples ---------------------------------------------------->
 </div>
 </section></section>
 <section>
-<section id="formalism" class="title-slide slide level1 center">
-<h1>Formalism</h1>
-<!------------------------- Probability -------------------------->
+<section id="examples" class="title-slide slide level1 center">
+<h1>Examples</h1>
+<!------------------------- Grid World -------------------------->
 </section>
-<section id="probability" class="slide level2">
-<h2>Probability</h2>
+<section id="grid-world" class="slide level2">
+<h2>Grid World</h2>
 <div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Definitions</strong></p>
+<div class="column" style="width:33%;">
+<p><strong>Environment</strong></p>
 <ul>
-<li class="fragment">Random experiment
+<li class="fragment">2 x 2 grid
 <ul>
-<li class="fragment">A process that produces an unpredictable outcome</li>
-</ul></li>
-<li class="fragment">Probability space <span class="math inline">\((S, F, P)\)</span>
-<ul>
-<li class="fragment">Sample space <span class="math inline">\(S\)</span>
-<ul>
-<li class="fragment">Set of possible outcomes</li>
-</ul></li>
-<li class="fragment">Sigma-algebra <span class="math inline">\(F\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(A \in F \Rightarrow A^c \in F\)</span></li>
-<li class="fragment"><span class="math inline">\(\{A_i\}_{i=1}^{\infty} \subseteq F \Rightarrow \bigcup_{i=1}^{\infty} A_i \in F\)</span></li>
-</ul></li>
-<li class="fragment">Probability measure <span class="math inline">\(P\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(P: F \rightarrow \mathbb{R}\)</span>
-<ul>
-<li class="fragment">Non-negativity <span class="math inline">\(P(A) \geq 0\)</span> for all <span class="math inline">\(A \in F\)</span></li>
-<li class="fragment">Normalization <span class="math inline">\(P(S) = 1\)</span></li>
-<li class="fragment">Countable additivity <span class="math inline">\(P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)\)</span>, <span class="math inline">\(A_i disjoint\)</span></li>
-</ul></li>
-</ul></li>
+<li class="fragment"><span class="math inline">\(s_1\)</span> and <span class="math inline">\(s_3\)</span> are normal cells</li>
+<li class="fragment"><span class="math inline">\(s_2\)</span> is an obstacle</li>
+<li class="fragment"><span class="math inline">\(s_4\)</span> is the goal</li>
 </ul></li>
 </ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Example</strong></p>
+</div><div class="column" style="width:33%;">
+<p><strong>Actions</strong></p>
 <ul>
-<li class="fragment">Random experiment
+<li class="fragment"><span class="math inline">\(\uparrow\)</span><br>
+</li>
+<li class="fragment"><span class="math inline">\(\downarrow\)</span></li>
+<li class="fragment"><span class="math inline">\(\leftarrow\)</span></li>
+<li class="fragment"><span class="math inline">\(\rightarrow\)</span></li>
+<li class="fragment"><span class="math inline">\(\bigcirc\)</span></li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong>Reward</strong></p>
 <ul>
-<li class="fragment">Rolling a fair die</li>
-</ul></li>
-<li class="fragment">Probability space
-<ul>
-<li class="fragment">Sample space <span class="math inline">\(S\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(S = \{1, 2, 3, 4, 5, 6\}\)</span></li>
-</ul></li>
-<li class="fragment">Sigma-algebra <span class="math inline">\(F\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(F = \{\emptyset, \{1\}, \{2\}, \dots, S\}\)</span></li>
-</ul></li>
-<li class="fragment">Probability measure <span class="math inline">\(P\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(P(\{i\}) = \frac{1}{6}\)</span> for each <span class="math inline">\(i \in S\)</span></li>
-</ul></li>
-</ul></li>
+<li class="fragment">Moving to <span class="math inline">\(s_2\)</span> or any wall will result in a reward of <span class="math inline">\(-1\)</span></li>
+<li class="fragment">Moving to either <span class="math inline">\(s_1\)</span> or <span class="math inline">\(s_3\)</span> will result in a reward of <span class="math inline">\(0\)</span></li>
+<li class="fragment">Moving <span class="math inline">\(s_4\)</span> will result in a reward of <span class="math inline">\(1\)</span></li>
 </ul>
 </div>
 </div>
-<!------------------------- Probability -------------------------->
+<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 400px; left: 700px; width: 270px; height: 270px; "></p>
 </section>
-<section id="probability-1" class="slide level2">
-<h2>Probability</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Definitions</strong></p>
-<ul>
-<li class="fragment">Random variable
-<ul>
-<li class="fragment">A function <span class="math inline">\(X: S \to \mathbb{R}\)</span></li>
-<li class="fragment"><span class="math inline">\(X^{-1}((-\infty, x]) \in F\)</span> for all <span class="math inline">\(x \in \mathbb{R}\)</span></li>
-</ul></li>
-<li class="fragment">PMF
-<ul>
-<li class="fragment">A function <span class="math inline">\(p_X: \mathbb{R} \to [0, 1]\)</span>:</li>
-<li class="fragment"><span class="math inline">\(p_X(x) = P(X = x)\)</span></li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment">Random variable
-<ul>
-<li class="fragment"><span class="math inline">\(X(s) = s\)</span></li>
-<li class="fragment"><span class="math inline">\(Y(s) = \begin{cases} 1, &amp; \text{if } s \text{ is even} \\ 0, &amp; \text{if } s \text{ is odd} \end{cases}\)</span></li>
-<li class="fragment"><span class="math inline">\(Z(s) = \begin{cases} 1, &amp; \text{if } s \leq 3 \\ 0, &amp; \text{if } s &gt; 3 \end{cases}\)</span></li>
-</ul></li>
-<li class="fragment">PMF
-<ul>
-<li class="fragment"><span class="math inline">\(p_X(x) = \frac{1}{6}\)</span> for <span class="math inline">\(x = 1, 2, 3, 4, 5, 6\)</span></li>
-<li class="fragment"><span class="math inline">\(p_Y(0) = p_Y(1) = \frac{3}{6} = 0.5\)</span></li>
-<li class="fragment"><span class="math inline">\(p_Z(0) = p_Z(1) = \frac{3}{6} = 0.5\)</span></li>
-</ul></li>
-</ul>
+<section id="mountain-car" class="slide level2">
+<h2>Mountain Car</h2>
+<p><strong>Train agent</strong></p>
+<div id="1bf65cfc" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">from</span> rlberry_scool.agents.mbqvi <span class="im">import</span> MBQVIAgent</span>
+<span id="cb1-2"><a href=""></a><span class="im">from</span> rlberry_research.envs.classic_control <span class="im">import</span> MountainCar</span>
+<span id="cb1-3"><a href=""></a><span class="im">from</span> rlberry.wrappers <span class="im">import</span> DiscretizeStateWrapper</span>
+<span id="cb1-4"><a href=""></a></span>
+<span id="cb1-5"><a href=""></a>_env <span class="op">=</span> MountainCar()</span>
+<span id="cb1-6"><a href=""></a>env <span class="op">=</span> DiscretizeStateWrapper(_env, <span class="dv">20</span>)</span>
+<span id="cb1-7"><a href=""></a>agent <span class="op">=</span> MBQVIAgent(env, n_samples<span class="op">=</span><span class="dv">40</span>, gamma<span class="op">=</span><span class="fl">0.99</span>)</span>
+<span id="cb1-8"><a href=""></a>agent.fit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>{'n_samples': 40,
+ 'total_samples': np.int64(48000),
+ 'n_iterations': 1376,
+ 'precision': 1e-06}</code></pre>
 </div>
 </div>
-<!------------------------- Probability -------------------------->
-</section>
-<section id="probability-2" class="slide level2">
-<h2>Probability</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Definitions</strong></p>
-<ul>
-<li class="fragment">Joint PMF
-<ul>
-<li class="fragment"><span class="math inline">\(p_{X,Y}(x, y) = P(X = x, Y = y)\)</span></li>
-</ul></li>
-<li class="fragment">Conditional PMF
-<ul>
-<li class="fragment"><span class="math inline">\(p_{Y|X}(y | x) = \frac{P_{X,Y}(x, y)}{P_X(x)}\)</span></li>
-</ul></li>
-<li class="fragment">Independence
-<ul>
-<li class="fragment"><span class="math inline">\(p_{X,Y}(x, y) = P_X(x)P_Y(y)\)</span> for all <span class="math inline">\(x, y\)</span></li>
-</ul></li>
-<li class="fragment">Conditional independence
-<ul>
-<li class="fragment"><span class="math inline">\(p_{Y|X, Z}(y | x, z) = P_{Y|X}(y | x)\)</span></li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment">Joint PMF
-<ul>
-<li class="fragment"><span class="math inline">\(p_{X,Y}(x, y) =\begin{cases} \frac{1}{6}, &amp; \text{if } (x, y) \in \{(1, 0), (2, 1), (3, 0), (4, 1), (5, 0), (6, 1)\} \\ 0, &amp; \text{otherwise} \end{cases}\)</span></li>
-</ul></li>
-<li class="fragment">Conditional PMF
-<ul>
-<li class="fragment"><span class="math inline">\(p_{Y|X}(y | x=2) = \begin{cases} 1, &amp; \text{if } y = 1 \\ 0, &amp; \text{if } y = 0 \end{cases}\)</span></li>
-</ul></li>
-<li class="fragment">Independence
-<ul>
-<li class="fragment"><span class="math inline">\(p_{X,Y}(x, y) \neq p_X(x)p_Y(y)\)</span> and <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span> are not independent</li>
-</ul></li>
-<li class="fragment">Conditional independence
-<ul>
-<li class="fragment"><span class="math inline">\(p_{Y|X,Z}(y | x, z) = p_{Y|X}(y | x) = \begin{cases} 1, &amp; \text{if } x \text{ is even and } y = 1 \\ 1, &amp; \text{if } x \text{ is odd and } y = 0 \\ 0, &amp; \text{otherwise} \end{cases}\)</span></li>
-</ul></li>
-</ul>
+<p><strong>Interact with environment</strong></p>
+<div id="89b131f2" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a>env.enable_rendering()</span>
+<span id="cb3-2"><a href=""></a>observation, info <span class="op">=</span> env.reset()</span>
+<span id="cb3-3"><a href=""></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
+<span id="cb3-4"><a href=""></a>    action <span class="op">=</span> agent.policy(observation)</span>
+<span id="cb3-5"><a href=""></a>    observation, reward, terminated, truncated, info <span class="op">=</span> env.step(action)</span>
+<span id="cb3-6"><a href=""></a>    done <span class="op">=</span> terminated <span class="kw">or</span> truncated</span>
+<span id="cb3-7"><a href=""></a></span>
+<span id="cb3-8"><a href=""></a>env.save_video(<span class="st">"video_plot_mountain_car.mp4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<!------------------------- Probability -------------------------->
-</section>
-<section id="probability-3" class="slide level2">
-<h2>Probability</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Definitions</strong></p>
-<ul>
-<li class="fragment">Joint PMF law of total probability
-<ul>
-<li class="fragment"><span class="math inline">\(p_X(x) = \sum_y p_{X, Y}(x, y)\)</span></li>
-</ul></li>
-<li class="fragment">Chain rule
-<ul>
-<li class="fragment"><span class="math inline">\(p_{X|Y}(x \mid y)=\sum_z p_{X|Z,Y}(x \mid z, y) p_{Z|Y}(z \mid y)\)</span></li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment"><strong>Joint PMF law of total probability</strong>
-<ul>
-<li class="fragment"><span class="math inline">\(\sum_y p_{X, Y}(x, y) = p_{X, Y}(x, 0) + p_{X, Y}(x, 1) = p_X(x)\)</span></li>
-<li class="fragment"><span class="math inline">\(\sum_x p_{X, Y}(x, y) = p_{X, Y}(1, y) + p_{X, Y}(2, y) + \cdots = p_Y(y)\)</span></li>
-</ul></li>
-<li class="fragment"><strong>Chain rule</strong>
-<ul>
-<li class="fragment"><span class="math inline">\(p_{X|Z,Y}(x \mid z, y) =\begin{cases} \frac{1}{2}, &amp; \text{if } x = 4 \text{ or } 6, z = 1, y = 1 \\ 1, &amp; \text{if } x = 2, z = 0, y = 1 \\ 1, &amp; \text{if } x = 5, z = 1, y = 0 \\ \frac{1}{2}, &amp; \text{if } x = 1 \text{ or } 3, z = 0, y = 0 \\ 0, &amp; \text{otherwise} \end{cases}\)</span></li>
-<li class="fragment"><span class="math inline">\(p_{Z|Y}(z \mid y) = \begin{cases} \frac{2}{3}, &amp; \text{if } z = 1 \text{ and } y = 1 \\ \frac{1}{3}, &amp; \text{if } z = 0 \text{ and } y = 1 \\ \frac{1}{3}, &amp; \text{if } z = 1 \text{ and } y = 0 \\ \frac{2}{3}, &amp; \text{if } z = 0 \text{ and } y = 0 \\0, &amp; \text{otherwise} \end{cases}\)</span></li>
-<li class="fragment"><span class="math inline">\(p_{X|Y}(x \mid y) = \begin{cases} \frac{1}{3}, &amp; \text{if } x \text{ is even and } y = 1 \\ \frac{1}{3}, &amp; \text{if } x \text{ is odd and } y = 0 \\ 0, &amp; \text{otherwise} \end{cases}\)</span></li>
-</ul></li>
-</ul>
-</div>
-</div>
-<!------------------------- Probability -------------------------->
-</section>
-<section id="probability-4" class="slide level2">
-<h2>Probability</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Definitions</strong></p>
-<ul>
-<li class="fragment">Expectation
-<ul>
-<li class="fragment"><span class="math inline">\(\mathbb{E}[X]=\sum_x p_X(x) x\)</span></li>
-</ul></li>
-<li class="fragment">Conditional expectation
-<ul>
-<li class="fragment"><span class="math inline">\(\mathbb{E}[X \mid Y=y]=\sum_x x p_{X|Y}(x \mid y)\)</span></li>
-</ul></li>
-<li class="fragment">Law of total expectation
-<ul>
-<li class="fragment"><span class="math inline">\(\mathbb{E}[X]=\sum_y \mathbb{E}[X \mid Y=y] p_Y(y)\)</span></li>
-</ul></li>
-<li class="fragment">Variance
-<ul>
-<li class="fragment"><span class="math inline">\(\operatorname{var}(X)=\mathbb{E}\left[(X-\bar{X})^2\right]\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(\operatorname{var}(X)=\mathbb{E}[X^2] - (\mathbb{E}[X])^2\)</span></li>
-</ul></li>
-</ul></li>
-<li class="fragment">Covariance
-<ul>
-<li class="fragment"><span class="math inline">\(\operatorname{cov}(X, Y)=\mathbb{E}[(X-\bar{X})(Y-\bar{Y})]\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(\operatorname{cov}(X, Y)=\mathbb{E}[XY] - \mathbb{E}[X] \mathbb{E}[Y]\)</span></li>
-</ul></li>
-</ul></li>
-<li class="fragment">Covariance matrix
-<ul>
-<li class="fragment"><span class="math inline">\(\Sigma=\mathbb{E} \left[(\vec{X}- \bar{\vec{X}})(\vec{X}-\bar{\vec{X}})^T\right] \in \mathbb{R}^{n \times n}\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\([\Sigma]_{i j} = \operatorname{cov}\left(X_i, X_j\right)\)</span></li>
-</ul></li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment"><p>Expectation</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\mathbb{E}[X]= (1 + 2 + 3 + 4 + 5 + 6) \cdot \frac{1}{6} = 3.5\)</span></li>
-</ul></li>
-<li class="fragment"><p>Conditional expectation</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\mathbb{E}[X \mid Y=1] = \sum_x x p_{X|Y}(x \mid y=1) = (2 + 4 + 6) \cdot \frac{1}{3} = 4\)</span></li>
-</ul></li>
-<li class="fragment"><p>Law of total expectation</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\mathbb{E}[X]= \mathbb{E}[X \mid Y=1] p_Y(1) + \mathbb{E}[X \mid Y=0] p_Y(0) = \frac{4 + 3}{2} = 3.5\)</span></li>
-</ul></li>
-<li class="fragment"><p>Variance</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\operatorname{var}(X) = \frac{1^2 + \cdots + 6^2}{6} - 3.5^2 \approx 2.92\)</span></li>
-</ul></li>
-<li class="fragment"><p>Covariance</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\operatorname{cov}(X, Y)=\sum_{x,y} p_{X, Y}(x, y) xy - 3.5 \cdot 0.5= 0.25\)</span></li>
-</ul></li>
-<li class="fragment"><p>Covariance matrix</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\Sigma = \begin{pmatrix} \text{Var}(X) &amp; \text{Cov}(X, Y) &amp; \text{Cov}(X, Z) \\ \text{Cov}(Y, X) &amp; \text{Var}(Y) &amp; \text{Cov}(Y, Z) \\ \text{Cov}(Z, X) &amp; \text{Cov}(Z, Y) &amp; \text{Var}(Z) \end{pmatrix} = \begin{pmatrix} 2.92 &amp; 0.25 &amp; -0.75 \\ 0.25 &amp; 0.25 &amp; \frac{1}{12} \\ -0.75 &amp; \frac{1}{12} &amp; 0.25 \end{pmatrix}\)</span></li>
-</ul></li>
-</ul>
-</div>
-</div>
-<!------------------------- Definitions -------------------------->
-</section>
-<section id="definitions" class="slide level2">
-<h2>Definitions</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Main</strong></p>
-<ul>
-<li class="fragment">Sets
-<ul>
-<li class="fragment">State space: <span class="math inline">\(\mathscr{S}=\left\{s_1, s_2, \ldots \right\}\)</span></li>
-<li class="fragment">Action space: <span class="math inline">\(\mathscr{A}(s)=\left\{a_1, a_2, \ldots, \right\}\)</span></li>
-<li class="fragment">Reward space: <span class="math inline">\(\mathscr{R}(s, a)=\left\{r_1, r_2, \ldots \right\}\)</span></li>
-</ul></li>
-<li class="fragment">Model
-<ul>
-<li class="fragment">State transition: <span class="math inline">\(p(s' \mid s, a)\)</span></li>
-<li class="fragment">Reward: <span class="math inline">\(p(r \mid s, a)\)</span></li>
-</ul></li>
-<li class="fragment">Policy
-<ul>
-<li class="fragment"><span class="math inline">\(\pi(a \mid s) = p(a \mid s)\)</span></li>
-</ul></li>
-<li class="fragment">Markov property
-<ul>
-<li class="fragment"><span class="math inline">\(p\left(s_{t+1} \mid s_t, a_t, s_{t-1}, \ldots \right)=p\left(s_{t+1} \mid s_t, a_t\right)\)</span></li>
-<li class="fragment"><span class="math inline">\(p\left(r_{t+1} \mid s_t, a_t, s_{t-1}, \ldots \right)=p\left(r_{t+1} \mid s_t, a_t\right)\)</span></li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment">Sets
-<ul>
-<li class="fragment">State space: <span class="math inline">\(\mathscr{S} = \{ s_1, s_2, s_3, s_4 \}\)</span></li>
-<li class="fragment">Action space: <span class="math inline">\(\mathscr{A} = \{ \uparrow, \downarrow, \leftarrow, \rightarrow, \bigcirc \}\)</span></li>
-<li class="fragment">Reward space: <span class="math inline">\(\mathscr{R} = \{ -1, +1, 0 \}\)</span></li>
-</ul></li>
-<li class="fragment">Model
-<ul>
-<li class="fragment">State transition: <span class="math inline">\(p(s' \mid s, a) = 0 \text{ or } 1\)</span></li>
-<li class="fragment">Reward: <span class="math inline">\(p(r \mid s, a) = 0 \text{ or } 1\)</span></li>
-</ul></li>
-<li class="fragment">Policy
-<ul>
-<li class="fragment"><span class="math inline">\(\pi(a \mid s) = 0 \text{ or } 1\)</span></li>
-</ul></li>
-<li class="fragment">Markov property
-<ul>
-<li class="fragment"><span class="math inline">\(p\left(s_{t+1} \mid s_t, a_t, s_{t-1}, \ldots \right)=p\left(s_{t+1} \mid s_t, a_t\right)\)</span></li>
-<li class="fragment"><span class="math inline">\(p\left(r_{t+1} \mid s_t, a_t, s_{t-1}, \ldots \right)=p\left(r_{t+1} \mid s_t, a_t\right)\)</span></li>
-</ul></li>
-</ul>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------------- Definitions -------------------------->
-</section>
-<section id="definitions-1" class="slide level2">
-<h2>Definitions</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Secondary</strong></p>
-<ul>
-<li class="fragment">State-action-reward trajectory
-<ul>
-<li class="fragment"><span class="math inline">\(\ldots S_t, R_{t} \overset{A_t} \rightarrow S_{t+1}, R_{t+1} \overset{A_{t+1}} \rightarrow S_{t+2}, R_{t+2} \ldots\)</span></li>
-</ul></li>
-<li class="fragment">Discounted return
-<ul>
-<li class="fragment"><span class="math inline">\(G_t = R_{t+1} + \gamma \cdot R_{t+2} + \gamma^2 \cdot R_{t+3} + \cdots\)</span></li>
-</ul></li>
-<li class="fragment">Terminal state
-<ul>
-<li class="fragment">Exists <span class="math inline">\(s_{T}\)</span> that resets the next state to a starting state
-<ul>
-<li class="fragment">Episodic task: There are terminal states</li>
-<li class="fragment">Continuing task: There are no terminal states</li>
-</ul></li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment">State-action-reward trajectory
-<ul>
-<li class="fragment"><span class="math inline">\(s_1, 0 \overset{\downarrow} \rightarrow s_3, 0 \overset{\rightarrow} \rightarrow s_4, 1 \overset{\bigcirc} \rightarrow s_4,
-  1 \overset{\bigcirc} \rightarrow \ldots\)</span></li>
-</ul></li>
-<li class="fragment">Discounted return
-<ul>
-<li class="fragment"><span class="math inline">\(G_0 = 0 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots = \frac{\gamma}{1-\gamma}\)</span></li>
-</ul></li>
-<li class="fragment">Continuing task: There are no terminal states</li>
-</ul>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------------- State value -------------------------->
-</section>
-<section id="state-value" class="slide level2">
-<h2>State value</h2>
-<p><strong>Definition</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi(s) \doteq \mathbb{E}\left[G_t \mid S_t=s\right]\)</span></li>
-</ul>
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi(s_1) = -0.5 + \frac{\gamma}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(v_\pi(s_2) = \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(v_\pi(s_3) = \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(v_\pi(s_4) = \frac{1}{1-\gamma}\)</span></li>
-</ul>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------------- Action value -------------------------->
-</section>
-<section id="action-value" class="slide level2">
-<h2>Action value</h2>
-<p><strong>Definition</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s, a) \doteq \mathbb{E}\left[G_t \mid S_t=s, A_t=a\right]\)</span></li>
-</ul>
-<p><strong>Example</strong></p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \rightarrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \downarrow) = \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \leftarrow) = -1 + \gamma (-0.5 + \frac{\gamma}{1-\gamma})\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \uparrow) = -1 + \gamma (-0.5 + \frac{\gamma}{1-\gamma})\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \bigcirc) = \gamma (-0.5 + \frac{\gamma}{1-\gamma})\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \rightarrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \downarrow) = 1 + -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \leftarrow) = \gamma (-0.5 + \frac{\gamma}{1-\gamma})\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \uparrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \bigcirc) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \rightarrow) = 1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \downarrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \leftarrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \uparrow) = 1 + \gamma (-0.5 + \frac{\gamma}{1-\gamma})\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \bigcirc) = \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \rightarrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \downarrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \leftarrow) = \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \uparrow) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \bigcirc) = 1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-</ul>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------------- Properties -------------------------->
-</section>
-<section id="properties" class="slide level2">
-<h2>Properties</h2>
-<p><strong>Action value to state value</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi(s)=\sum_{a \in \mathscr{A}} \pi(a \mid s) q_\pi(s, a)\)</span></li>
-</ul>
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi(s_1) = 0.5  + 0.5 \gamma \frac{1}{1-\gamma} = -0.5 + \frac{\gamma}{1-\gamma}\)</span></li>
-</ul>
-<p><strong>State value to action value</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s, a)=\sum_{r \in \mathscr{R}} p(r \mid s, a) r+\gamma \sum_{s^{\prime} \in \mathscr{S}} p\left(s^{\prime} \mid s,
-a\right) v_\pi\left(s^{\prime}\right)\)</span></li>
-</ul>
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \rightarrow) = 1(-1) + \gamma v_\pi(s_2) = -1 + \gamma \frac{1}{1-\gamma}\)</span></li>
-</ul>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!---------------------- Bellman equations ---------------------->
-</section>
-<section id="bellman-equations" class="slide level2">
-<h2>Bellman equations</h2>
-<p><strong>State value</strong></p>
-<ul>
-<li class="fragment">General
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi(s) = \sum_{a \in \mathscr{A}} \pi(a \mid s)\left[\sum_{r \in \mathscr{R}} p(r \mid s, a) r+\gamma \sum_{s^{\prime} \in
-  \mathscr{S}} p\left(s^{\prime} \mid s, a\right) v_\pi\left(s^{\prime}\right)\right]\)</span></li>
-</ul></li>
-<li class="fragment">Equivalent forms
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi(s)=\sum_{a \in \mathscr{A}} \pi(a \mid s) \sum_{s^{\prime} \in \mathscr{S}} \sum_{r \in \mathscr{R}}
-  p\left(s^{\prime}, r \mid s, a\right)\left[r+\gamma v_\pi\left(s^{\prime}\right)\right]\)</span></li>
-<li class="fragment"><span class="math inline">\(v_\pi(s)=\sum_{a \in \mathscr{A}} \pi(a \mid s) \sum_{s^{\prime} \in \mathscr{S}} p\left(s^{\prime} \mid s,
-  a\right)\left[r\left(s^{\prime}\right)+\gamma v_\pi\left(s^{\prime}\right)\right]\)</span> if the reward depends only on the next state</li>
-</ul></li>
-</ul>
-<p><strong>Example</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi(s_1) = -0.5 + 0.5 \gamma (v_\pi(s_2) + v_\pi(s_3))\)</span></li>
-<li class="fragment"><span class="math inline">\(v_\pi(s_2) = 1 + \gamma v_\pi(s_4)\)</span></li>
-<li class="fragment"><span class="math inline">\(v_\pi(s_3) = 1 + \gamma v_\pi(s_4)\)</span></li>
-<li class="fragment"><span class="math inline">\(v_\pi(s_4) = 1 + \gamma v_\pi(s_4)\)</span></li>
-</ul>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-</section>
-<section id="bellman-equations-1" class="slide level2">
-<h2>Bellman equations</h2>
-<p><strong>State value matrix-vector form</strong></p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi=r_\pi+\gamma P_\pi v_\pi\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(\left[r_\pi\right]_s \doteq \sum_{a \in \mathscr{A}} \pi(a \mid s) \sum_{r \in \mathscr{R}} p(r \mid s, a) r\)</span></li>
-<li class="fragment"><span class="math inline">\(\left[P_\pi\right]_{s s^{\prime}} \doteq \sum_{a \in \mathscr{A}} \pi(a \mid s) p\left(s^{\prime} \mid s, a\right)\)</span></li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li class="fragment">Properties
-<ul>
-<li class="fragment"><span class="math inline">\(P_\pi \geq 0\)</span></li>
-<li class="fragment"><span class="math inline">\(P_\pi \mathbf{1}=\mathbf{1}\)</span></li>
-<li class="fragment"><span class="math inline">\(I-\gamma P_\pi\)</span> is invertible</li>
-<li class="fragment"><span class="math inline">\(\left(I-\gamma P_\pi\right)^{-1} \geq I\)</span></li>
-<li class="fragment"><span class="math inline">\(\left(I-\gamma P_\pi\right)^{-1} r \geq r\)</span> if <span class="math inline">\(r \geq 0\)</span></li>
-<li class="fragment"><span class="math inline">\(\left(I-\gamma P_\pi\right)^{-1} r_1 \geq\left(I-\gamma P_\pi\right)^{-1} r_2\)</span> if <span class="math inline">\(r_1 \geq r_2\)</span></li>
-</ul></li>
-</ul>
-</div>
-</div>
-<p><strong>Example</strong></p>
-<div class="columns">
-<div class="column" style="width:30%;">
-<ul>
-<li class="fragment"><span class="math inline">\(r_\pi = \left[\begin{array}{c}0.5(0)+0.5(-1) \\ 1 \\ 1 \\ 1\end{array}\right]\)</span></li>
-</ul>
-</div><div class="column" style="width:30%;">
-<ul>
-<li class="fragment"><span class="math inline">\(P_\pi = \left[\begin{array}{cccc}0 &amp; 0.5 &amp; 0.5 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0 &amp; 1\end{array}\right]\)</span></li>
-</ul>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!---------------------- Bellman equations ---------------------->
-</section>
-<section id="bellman-equations-2" class="slide level2">
-<h2>Bellman equations</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Good policies</strong></p>
-<p><img data-src="images/good_policies.png" class="absolute" style="width: 400px; height: 400px; "></p>
-</div><div class="column" style="width:50%;">
-<p><strong>Bad policies</strong></p>
-<p><img data-src="images/bad_policies.png" class="absolute" style="width: 400px; height: 400px; "></p>
-</div>
-</div>
-<!---------------------- Bellman equations ---------------------->
-</section>
-<section id="bellman-equations-3" class="slide level2">
-<h2>Bellman equations</h2>
-<p><strong>Action value</strong></p>
-<ul>
-<li class="fragment">General
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s, a)=\sum_{r \in \mathscr{R}} p(r \mid s, a) r+\gamma \sum_{s^{\prime} \in \mathscr{S}} p\left(s^{\prime} \mid s,
-  a\right) \sum_{a^{\prime} \in \mathscr{A}\left(s^{\prime}\right)} \pi\left(a^{\prime} \mid s^{\prime}\right)
-  q_\pi\left(s^{\prime}, a^{\prime}\right)\)</span></li>
-</ul></li>
-</ul>
-<p><strong>Example</strong></p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \rightarrow) = -1 + \gamma q_\pi(s_2, \downarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \downarrow) = \gamma q_\pi(s_3, \rightarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \leftarrow) = -1 + \gamma (q_\pi(s_1, \rightarrow) + q_\pi(s_1, \downarrow))\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \uparrow) = -1 + \gamma (q_\pi(s_1, \rightarrow) + q_\pi(s_1, \downarrow))\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_1, \bigcirc) = \gamma (q_\pi(s_1, \rightarrow) + q_\pi(s_1, \downarrow))\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \rightarrow) = -1 + \gamma q_\pi(s_2, \downarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \downarrow) = 1 + + \gamma q_\pi(s_4, \bigcirc)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \leftarrow) = \gamma (q_\pi(s_1, \rightarrow) + q_\pi(s_4, \downarrow))\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \uparrow) = -1 + \gamma q_\pi(s_2, \downarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_2, \bigcirc) = -1 + \gamma q_\pi(s_2, \downarrow)\)</span></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \rightarrow) = 1 + \gamma q_\pi(s_4, \bigcirc)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \downarrow) = -1 + \gamma q_\pi(s_3, \rightarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \leftarrow) = -1 + \gamma q_\pi(s_3, \rightarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \uparrow) = 1 + \gamma (q_\pi(s_1, \rightarrow) + q_\pi(s_1, \downarrow))\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_3, \bigcirc) = \gamma q_\pi(s_3, \rightarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \rightarrow) = -1 + \gamma q_\pi(s_4, \bigcirc)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \downarrow) = -1 + \gamma q_\pi(s_4, \bigcirc)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \leftarrow) = \gamma q_\pi(s_3, \rightarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \uparrow) = -1 + \gamma q_\pi(s_2, \downarrow)\)</span></li>
-<li class="fragment"><span class="math inline">\(q_\pi(s_4, \bigcirc) = 1 + \gamma q_\pi(s_4, \bigcirc)\)</span></li>
-</ul>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!---------------------- Bellman equations ---------------------->
-</section>
-<section id="bellman-equations-4" class="slide level2">
-<h2>Bellman equations</h2>
-<p><strong>Action value matrix-vector form</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(q_\pi=\tilde{r}+\gamma P \Pi q_\pi\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(\left[q_\pi\right]_{(s, a)}=q_\pi(s, a)\)</span></li>
-<li class="fragment"><span class="math inline">\([\tilde{r}]_{(s, a)}=\sum_{r \in \mathscr{R}} p(r \mid s, a) r\)</span></li>
-<li class="fragment"><span class="math inline">\([P]_{(s, a), s^{\prime}}=p\left(s^{\prime} \mid s, a\right)\)</span></li>
-<li class="fragment"><span class="math inline">\(\Pi_{s^{\prime},\left(s^{\prime}, a^{\prime}\right)}=\pi\left(a^{\prime} \mid s^{\prime}\right)\)</span></li>
-</ul></li>
-</ul>
-<p><strong>Example</strong></p>
-<div class="columns">
-<div class="column" style="width:30%;">
-<ul>
-<li class="fragment"><span class="math inline">\(\tilde{r} = \left[\begin{array}{c} -1 \\ 0 \\ -1 \\ -1 \\ 0 \\ \vdots\end{array}\right]\)</span></li>
-</ul>
-</div><div class="column" style="width:30%;">
-<ul>
-<li class="fragment"><span class="math inline">\(P = \left[\begin{array}{cccc}1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0 \\ 1 &amp; 0 &amp; 0 &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots \end{array}\right]\)</span></li>
-</ul>
-</div><div class="column" style="width:40%;">
-<ul>
-<li class="fragment"><span class="math inline">\(\Pi = \left[\begin{array}{cccc}0 &amp; 0.5 &amp; 0 &amp; 0.5 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;\dots \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp;\dots \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \dots \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \dots \end{array}\right]\)</span></li>
-</ul>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------------------------------------- Implementation -------------------------------------------------->
-</section></section>
-<section>
-<section id="implementation" class="title-slide slide level1 center">
-<h1>Implementation</h1>
-<!---------------------------- Model ---------------------------->
-</section>
-<section id="model" class="slide level2">
-<h2>Model</h2>
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><strong>State transition probability</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\([P]_{(s, a), s^{\prime}}=p\left(s^{\prime} \mid s, a\right)\)</span></li>
-</ul>
-<div id="d0825088" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href=""></a>P <span class="op">=</span> np.array(</span>
-<span id="cb1-3"><a href=""></a>    [</span>
-<span id="cb1-4"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-5"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-6"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-7"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-8"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-9"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-10"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb1-11"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-12"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-13"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-14"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-15"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-16"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-17"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb1-18"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-19"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-20"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb1-21"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
-<span id="cb1-22"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb1-23"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>]</span>
-<span id="cb1-24"><a href=""></a>    ]</span>
-<span id="cb1-25"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:45%;">
-<p><strong>Reward probability</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\([R]_{(s, a), r}=p\left(r \mid s, a\right)\)</span></li>
-</ul>
-<div id="af64a4a2" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a>R <span class="op">=</span> np.array(</span>
-<span id="cb2-2"><a href=""></a>    [</span>
-<span id="cb2-3"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-4"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb2-5"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-6"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-7"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb2-8"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-9"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-10"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb2-11"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-12"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-13"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb2-14"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-15"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-16"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-17"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb2-18"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-19"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-20"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>],</span>
-<span id="cb2-21"><a href=""></a>        [<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
-<span id="cb2-22"><a href=""></a>        [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>]</span>
-<span id="cb2-23"><a href=""></a>    ]</span>
-<span id="cb2-24"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!---------------------------- Policy ---------------------------->
-</section>
-<section id="policy" class="slide level2">
-<h2>Policy</h2>
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><strong>Policy probability</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\([\Pi]_{a, s} = p(a \mid s)\)</span></li>
-</ul>
-<div id="213b0f80" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a>Pi <span class="op">=</span> np.array([</span>
-<span id="cb3-2"><a href=""></a>    [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
-<span id="cb3-3"><a href=""></a>    [<span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
-<span id="cb3-4"><a href=""></a>    [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
-<span id="cb3-5"><a href=""></a>    [<span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>],</span>
-<span id="cb3-6"><a href=""></a>    [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>]</span>
-<span id="cb3-7"><a href=""></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------ Bellman equations solutions ----------------->
-</section>
-<section id="bellman-equations-solutions" class="slide level2">
-<h2>Bellman equations solutions</h2>
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><strong>Expected reward under policy</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(\left[r_\pi\right]_s = \sum_{a \in \mathscr{A}} \pi(a \mid s) \sum_{r \in \mathscr{R}} p(r \mid s, a) r\)</span></li>
-<li class="fragment"><span class="math inline">\(\left[r_\pi\right]_s = \sum_{a \in \mathscr{A}} \big( R \cdot \left[\begin{array}{c}-1 &amp; 1 &amp; 0 \end{array}\right]^T \big)_{s, a} \cdot [\Pi]_{a, s}\)</span></li>
-</ul>
-<div id="43f49978" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a>r_space <span class="op">=</span> np.array([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>])</span>
-<span id="cb4-2"><a href=""></a>r_p <span class="op">=</span> np.diagonal(</span>
-<span id="cb4-3"><a href=""></a>    np.matmul(</span>
-<span id="cb4-4"><a href=""></a>        np.dot(R, r_space).reshape(<span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb4-5"><a href=""></a>        Pi</span>
-<span id="cb4-6"><a href=""></a>    )</span>
-<span id="cb4-7"><a href=""></a>)</span>
-<span id="cb4-8"><a href=""></a>r_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>array([-0.5,  1. ,  1. ,  1. ])</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:45%;">
-<p><strong>State transition probability under policy</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(\left[P_\pi\right]_{s s^{\prime}} = \sum_{a \in \mathscr{A}} \pi(a \mid s) p\left(s^{\prime} \mid s, a\right)\)</span></li>
-<li class="fragment"><span class="math inline">\(\left[P_\pi\right]_{s s^{\prime}} = \sum_{a \in \mathscr{A}} [\Pi^T]_{s, a} [P]_{(s, a), s^{\prime}}\)</span></li>
-</ul>
-<div id="27771030" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a>P_p <span class="op">=</span> np.diagonal(</span>
-<span id="cb6-2"><a href=""></a>    np.matmul(</span>
-<span id="cb6-3"><a href=""></a>        P.T.reshape(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>), </span>
-<span id="cb6-4"><a href=""></a>        Pi</span>
-<span id="cb6-5"><a href=""></a>    ).T</span>
-<span id="cb6-6"><a href=""></a>).T</span>
-<span id="cb6-7"><a href=""></a>P_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>array([[0. , 0.5, 0.5, 0. ],
-       [0. , 0. , 0. , 1. ],
-       [0. , 0. , 0. , 1. ],
-       [0. , 0. , 0. , 1. ]])</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------ Bellman equations solutions ----------------->
-</section>
-<section id="bellman-equations-solutions-1" class="slide level2">
-<h2>Bellman equations solutions</h2>
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><strong>Closed-form</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(v_\pi=\left(I-\gamma P_\pi\right)^{-1} r_\pi\)</span></li>
-</ul>
-<div id="9730fed1" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a>gamma <span class="op">=</span> <span class="fl">0.9</span></span>
-<span id="cb8-2"><a href=""></a>I <span class="op">=</span> np.identity(r_p.size)</span>
-<span id="cb8-3"><a href=""></a>v_cfs <span class="op">=</span> np.dot(np.linalg.inv(I <span class="op">-</span> gamma <span class="op">*</span> P_p), r_p)</span>
-<span id="cb8-4"><a href=""></a>v_cfs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>array([ 8.5, 10. , 10. , 10. ])</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
-<!------------------ Bellman equations solutions ----------------->
-</section>
-<section id="bellman-equations-solutions-2" class="slide level2">
-<h2>Bellman equations solutions</h2>
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><strong>Iterative solution</strong></p>
-<ul>
-<li class="fragment"><span class="math inline">\(v_{k+1}=r_\pi+\gamma P_\pi v_k, \quad k=0,1,2, \ldots\)</span></li>
-</ul>
-<div id="472a038b" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href=""></a>tol <span class="op">=</span> <span class="fl">1e-5</span></span>
-<span id="cb10-2"><a href=""></a>v_is <span class="op">=</span> np.zeros_like(r_p)</span>
-<span id="cb10-3"><a href=""></a><span class="cf">while</span> <span class="va">True</span>:</span>
-<span id="cb10-4"><a href=""></a>    v_is_current <span class="op">=</span> v_is</span>
-<span id="cb10-5"><a href=""></a>    v_is <span class="op">=</span> r_p <span class="op">+</span> gamma <span class="op">*</span> np.dot(P_p, v_is)</span>
-<span id="cb10-6"><a href=""></a>    diff <span class="op">=</span> np.<span class="bu">abs</span>(v_is <span class="op">-</span> v_is_current)</span>
-<span id="cb10-7"><a href=""></a>    <span class="cf">if</span> np.<span class="bu">any</span>(diff <span class="op">&lt;</span> tol):</span>
-<span id="cb10-8"><a href=""></a>        <span class="cf">break</span></span>
-<span id="cb10-9"><a href=""></a>v_is</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>array([8.49991665, 9.99991665, 9.99991665, 9.99991665])</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><img data-src="images/stochastic_policy.png" class="absolute" style="top: 100px; left: 1020px; width: 170px; height: 170px; "></p>
+<p><strong>Last episode video</strong></p>
+<video id="video_shortcode_videojs_video1" width="250" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="video_plot_mountain_car.mp4"></video>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
@@ -1641,6 +922,7 @@ a\right) v_\pi\left(s^{\prime}\right)\)</span></li>
       }
     });
     </script>
+    <script>videojs(video_shortcode_videojs_video1);</script>
     
 
 </body></html>
